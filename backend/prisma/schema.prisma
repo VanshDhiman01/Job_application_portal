@@ -1,0 +1,55 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Job {
+  id          String        @id @default(uuid())
+  title       String
+  company     String
+  location    String
+  workMode    String
+  description String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  questions   Question[]
+  applications Application[]
+}
+
+model Question {
+  id       String  @id @default(uuid())
+  jobId    String
+  job      Job     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  label    String
+  type     String
+  required Boolean
+  options  Json?
+
+  answers  Answer[]
+}
+
+model Application {
+  id        String   @id @default(uuid())
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  appliedAt DateTime @default(now())
+  status    String   @default("Submitted")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  answers   Answer[]
+}
+
+model Answer {
+  id            String      @id @default(uuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  questionId    String
+  question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  value         Json
+}

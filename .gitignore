@@ -1,0 +1,10 @@
+node_modules/
+
+# Frontend Build
+dist/
+dist-ssr/
+*.local
+
+# Environment Variables
+.env
+.env.local
