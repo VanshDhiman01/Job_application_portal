@@ -20,6 +20,13 @@ app.use(express.json());
 app.use('/api/jobs', jobRoutes);
 app.use('/api/applications', applicationRoutes);
 
+app.get('/', (req, res) => {
+  res.json({
+    success: true,
+    message: "Job Application Portal Backend is running"
+  });
+});
+
 // 404 Handler
 app.use((req, res, next) => {
   res.status(404).json({ error: { code: 404, message: 'Route not found' } });
